@@ -57,14 +57,14 @@
 </script>
 
 <dialog 
-				inert={isOpen ? undefined : ''} 
-				loading={loading ? '' : undefined} 
-				modal-mode={mode} 
-				bind:this={dialog}
-				style:margin-top={marginTop}
-				style:margin-left={marginLeft}
-				on:close={closeDialog}
-				> 
+	inert={isOpen ? undefined : ''} 
+	loading={loading ? '' : undefined} 
+	modal-mode={mode} 
+	bind:this={dialog}
+	style:margin-top={marginTop}
+	style:margin-left={marginLeft}
+	on:close={closeDialog}
+	> 
 	<form method="dialog">
 		{#if mode === 'mega'}
 		<header> 
