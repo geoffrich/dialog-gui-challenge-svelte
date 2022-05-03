@@ -142,7 +142,7 @@
 	}
 	
 	@media (prefers-reduced-motion: no-preference) {
-		dialog:global([open]) {
+		dialog[open] {
 			animation: var(--animation-slide-in-up) forwards;
 		}
 	}
