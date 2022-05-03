@@ -10,8 +10,8 @@
 	let dialog;
 	let loading = true;
 	let isOpen = false;
-	let marginTop = null;
-	let marginLeft = null;
+
+	let clientHeight, clientWidth, innerWidth;
 	
 	onMount(() => { loading = false; });
 	
@@ -31,6 +31,12 @@
 		await animationsComplete(dialog);
 		dispatch('closed', { returnValue });
 	}
+
+	function lightDismiss({target}) {
+		if (target.nodeName === 'DIALOG') {
+			dialog.close('dismiss');
+		}
+	}
 	
 	export function open() {
 		dialog.showModal();
@@ -40,30 +46,22 @@
 	function focus(node) {
 		node.focus();
 	}
-	
-	$: updateMargin(topOffset, leftOffset);
-	
-	function updateMargin(topOffset, leftOffset) {
-		if (topOffset >= 0 && leftOffset >= 0) {
-			const miniModalHeight = dialog.clientHeight - 15;
-			const miniModalWidth = dialog.clientWidth / 2;
-			
-			let left = leftOffset - miniModalWidth;
-			if (left < 0) left = 10;
-			marginTop = topOffset - miniModalHeight + 'px';
-			marginLeft = window.innerWidth >= 768 ? left + 'px' : null;
-		}
-	}
+
+	$: offsetModal = topOffset >= 0 && leftOffset >= 0;
 </script>
 
+<svelte:window bind:innerWidth></svelte:window>
 <dialog 
 	inert={isOpen ? undefined : ''} 
 	loading={loading ? '' : undefined} 
 	modal-mode={mode} 
 	bind:this={dialog}
-	style:margin-top={marginTop}
-	style:margin-left={marginLeft}
+	style:margin-top={offsetModal ? `${topOffset - clientHeight - 15}px` : null}
+	style:margin-left={offsetModal && innerWidth >= 768 ? `${leftOffset - clientWidth / 2}px` : null}
 	on:close={closeDialog}
+	on:click={lightDismiss}
+	bind:clientHeight
+	bind:clientWidth
 	> 
 	<form method="dialog">
 		{#if mode === 'mega'}
