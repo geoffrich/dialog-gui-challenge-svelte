@@ -4,9 +4,11 @@
 	import { fly, scale } from 'svelte/transition';
 	import { easeElastic3 } from './lib/easing';
 
-	let megaDialog, miniDialog;
+	/** @type {Dialog} */
+	let megaDialog;
+	/** @type {Dialog} */
+	let miniDialog;
 	let id = 1;
-	let topOffset, leftOffset;
 	let toRemove;
 	let fileInput;
 
@@ -16,10 +18,7 @@
 
 	function promptRemove(e, id) {
 		const removeButton = e.target;
-		const bounds = removeButton.getBoundingClientRect();
-		topOffset = bounds.y;
-		leftOffset = bounds.left;
-		miniDialog.open();
+		miniDialog.open(removeButton);
 		toRemove = id;
 	}
 
@@ -91,7 +90,7 @@
 	</menu>
 </Dialog>
 
-<Dialog mode="mini" bind:this={miniDialog} {topOffset} {leftOffset} on:closing={removeUser}>
+<Dialog mode="mini" bind:this={miniDialog} on:closing={removeUser}>
 	<svelte:fragment slot="content">
 		<section class="warning-message">
 			<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">

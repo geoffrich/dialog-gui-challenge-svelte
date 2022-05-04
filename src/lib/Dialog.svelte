@@ -2,13 +2,14 @@
 	import { createEventDispatcher, tick } from 'svelte';
 
 	export let mode = 'mega';
-	export let topOffset = -1;
-	export let leftOffset = -1;
+	
 
 	const dispatch = createEventDispatcher();
 
 	let dialog, cancelButton;
 	let isOpen = false;
+	let topOffset = -1;
+	let leftOffset = -1;
 
 	let clientHeight, clientWidth, innerWidth;
 
@@ -33,7 +34,15 @@
 		}
 	}
 
-	export function open() {
+	/**
+	 * @param {HTMLElement} [offsetElement]
+	 */
+	export function open(offsetElement) {
+		if (offsetElement) {
+			const bounds = offsetElement.getBoundingClientRect();
+			topOffset = bounds.y;
+			leftOffset = bounds.left;
+		}
 		dialog.showModal();
 		isOpen = true;
 		tick().then(() => cancelButton.focus());
@@ -45,7 +54,6 @@
 <svelte:window bind:innerWidth />
 <dialog
 	inert={isOpen ? undefined : ''}
-	modal-mode={mode}
 	bind:this={dialog}
 	style:margin-top={offsetModal ? `${topOffset - clientHeight - 15}px` : null}
 	style:margin-left={offsetModal && innerWidth >= 768 ? `${leftOffset - clientWidth / 2}px` : null}
@@ -53,6 +61,8 @@
 	on:click={lightDismiss}
 	bind:clientHeight
 	bind:clientWidth
+	class:mega={mode === 'mega'}
+	class:mini={mode === 'mini'}
 >
 	<form method="dialog">
 		{#if mode === 'mega'}
@@ -81,7 +91,7 @@
 </dialog>
 
 <style>
-	:global(html):has(dialog[open][modal-mode='mega']) {
+	:global(html):has(dialog[open].mega) {
 		overflow: hidden;
 	}
 
@@ -117,7 +127,7 @@
 	}
 
 	@media (max-width: 768px) {
-		dialog[modal-mode='mega'] {
+		dialog.mega {
 			margin-block-end: 0;
 			border-end-end-radius: 0;
 			border-end-start-radius: 0;
@@ -125,7 +135,7 @@
 	}
 
 	@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
-		dialog[modal-mode='mega'] {
+		dialog.mega {
 			animation: var(--animation-slide-out-down) forwards;
 			animation-timing-function: var(--ease-squish-2);
 		}
@@ -142,11 +152,11 @@
 		opacity: 0;
 	}
 
-	dialog[modal-mode='mega']::backdrop {
+	dialog.mega::backdrop {
 		backdrop-filter: blur(25px);
 	}
 
-	dialog[modal-mode='mini']::backdrop {
+	dialog.mini::backdrop {
 		backdrop-filter: none;
 	}
 
