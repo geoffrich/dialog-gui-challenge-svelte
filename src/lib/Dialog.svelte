@@ -1,5 +1,5 @@
 <script>
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount, createEventDispatcher, tick } from 'svelte';
 	
 	export let mode = 'mega';
 	export let topOffset = -1;
@@ -7,7 +7,7 @@
 	
 	const dispatch = createEventDispatcher();
 	
-	let dialog;
+	let dialog, cancelButton;
 	let loading = true;
 	let isOpen = false;
 
@@ -41,10 +41,7 @@
 	export function open() {
 		dialog.showModal();
 		isOpen = true;
-	}
-	
-	function focus(node) {
-		node.focus();
+		tick().then(() => cancelButton.focus());
 	}
 
 	$: offsetModal = topOffset >= 0 && leftOffset >= 0;
@@ -82,8 +79,7 @@
 		<footer>
 			<slot name="menu"></slot>
 			<menu>
-				<!-- TODO: focus doesn't seem to be working -->
-				<button use:focus type="button" on:click={close}>Cancel</button>
+				<button bind:this={cancelButton} type="button" on:click={close}>Cancel</button>
 				<button type="submit" value="confirm">Confirm</button>
 			</menu>
 		</footer>
@@ -177,7 +173,7 @@
 	}
 	
 	article {
-		overflow-y: scroll; 
+		overflow-y: auto; 
 		max-block-size: 100%; /* safari */
 		overscroll-behavior-y: contain;
 		display: grid;
@@ -185,12 +181,8 @@
 		gap: var(--size-3);
 		box-shadow: var(--shadow-2);
 		z-index: var(--layer-1);
-		padding-inline: var(--size-5) var(--size-3);
+		padding-inline: var(--size-5);
 		padding-block: var(--size-3);
-	}
-	
-	article::-webkit-scrollbar {
-		background: var(--surface-2);
 	}
 	
 	@media (prefers-color-scheme: light) {
