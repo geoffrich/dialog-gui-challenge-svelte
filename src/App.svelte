@@ -1,5 +1,6 @@
 <script>
 	import Dialog from './lib/Dialog.svelte';
+	import GitHubCorner from './lib/GitHubCorner.svelte';
 	import { flip } from 'svelte/animate';
 	import { fly, scale } from 'svelte/transition';
 	import { easeElastic3 } from './lib/easing';
@@ -132,6 +133,8 @@
 		</div>
 	{/each}
 </main>
+
+<GitHubCorner />
 
 <style>
 	:global(body) {
