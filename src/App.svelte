@@ -115,7 +115,7 @@
 			{#if user.src}
 				<div class="user" in:fly={{ y: -120, easing: easeElastic3 }} out:scale={{ start: 0.75 }}>
 					<img src={user.src} alt="" />
-					<button title="Remove user" on:click={(e) => promptRemove(e, user.id)}>
+					<button aria-label="remove user" on:click={(e) => promptRemove(e, user.id)}>
 						<svg width="24" height="24" viewBox="0 0 24 24">
 							<line x1="18" y1="6" x2="6" y2="18" />
 							<line x1="6" y1="6" x2="18" y2="18" />
@@ -123,7 +123,7 @@
 					</button>
 				</div>
 			{:else}
-				<button class="user" on:click={openMegaDialog}>
+				<button class="user" on:click={openMegaDialog} aria-label="add user">
 					<svg width="24" height="24" viewBox="0 0 24 24">
 						<line x1="12" y1="5" x2="12" y2="19" />
 						<line x1="5" y1="12" x2="19" y2="12" />
