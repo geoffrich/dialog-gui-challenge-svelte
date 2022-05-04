@@ -1,8 +1,8 @@
 <script>
 	import { createEventDispatcher, tick } from 'svelte';
+	import { animationsComplete } from './util';
 
 	export let mode = 'mega';
-	
 
 	const dispatch = createEventDispatcher();
 
@@ -12,9 +12,6 @@
 	let leftOffset = -1;
 
 	let clientHeight, clientWidth, innerWidth;
-
-	const animationsComplete = (element) =>
-		Promise.allSettled(element.getAnimations().map((animation) => animation.finished));
 
 	function close() {
 		dialog.close('close');
