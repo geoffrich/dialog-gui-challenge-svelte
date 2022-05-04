@@ -1,5 +1,5 @@
 <script>
-	import { onMount, createEventDispatcher, tick } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	
 	export let mode = 'mega';
 	export let topOffset = -1;
@@ -8,12 +8,9 @@
 	const dispatch = createEventDispatcher();
 	
 	let dialog, cancelButton;
-	let loading = true;
 	let isOpen = false;
 
 	let clientHeight, clientWidth, innerWidth;
-	
-	onMount(() => { loading = false; });
 	
 	const animationsComplete = element =>
 		Promise.allSettled(
@@ -50,7 +47,6 @@
 <svelte:window bind:innerWidth></svelte:window>
 <dialog 
 	inert={isOpen ? undefined : ''} 
-	loading={loading ? '' : undefined} 
 	modal-mode={mode} 
 	bind:this={dialog}
 	style:margin-top={offsetModal ? `${topOffset - clientHeight - 15}px` : null}
@@ -159,10 +155,6 @@
 	dialog::backdrop {
 		transition: backdrop-filter .5s ease;
 	}
-
-	dialog[loading] {
-		visibility: hidden;
-	}
 	
 	form {
 		display: grid;
@@ -187,10 +179,6 @@
 	
 	@media (prefers-color-scheme: light) {
 		article {
-			background: var(--surface-1);
-		}
-		
-		article::-webkit-scrollbar {
 			background: var(--surface-1);
 		}
 	}
@@ -240,8 +228,6 @@
 	menu:only-child {
 		margin-inline-start: auto;
 	}
-	
-
 	
 	:is(header, footer) {
 		background-color: var(--surface-2);
