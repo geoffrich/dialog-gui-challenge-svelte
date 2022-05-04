@@ -1,8 +1,7 @@
 <script>
 	import Dialog from './lib/Dialog.svelte';
-	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { fly } from 'svelte/transition';
+	import { fly, scale } from 'svelte/transition';
 	import { easeElastic3 } from './lib/easing';
 	
 	let megaDialog, miniDialog;
@@ -52,8 +51,8 @@
 	let users = [
 		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=e49dd48962488beade4c44491e56a5a9', id: id++ },
 		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=ca71b901f3ad2ce77d50ab296aff3f5f', id: id++ },
-		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=ca71b901f3ad2ce77d50ab296aff3f5f', id: id++ },
-		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=ca71b901f3ad2ce77d50ab296aff3f5f', id: id++ }
+		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=c7c8fdafb02f85e5960dda582db1af88', id: id++ },
+		{ src: 'https://doodleipsum.com/700x700/avatar-5?i=7df0ae04112bf5365a7086f0b418a4a4', id: id++ },
 	];
 </script>
 
@@ -96,10 +95,10 @@
 <main>
 	<!-- Add an empty user to the end that will act as a button
 			This way we can apply FLIP to the button as well -->
-	{#each [...users, { id: -1 }] as user (user.id)}
+	{#each [...users, { id: -1, src: null }] as user (user.id)}
 		<div animate:flip={{duration: 400}}>
 			{#if user.src}
-				<div class="user" in:fly={{y: -120, easing: easeElastic3 }}>
+				<div class="user" in:fly={{y: -120, easing: easeElastic3 }} out:scale={{start: 0.75}}>
 					<img src={user.src} alt="">
 					<button title="Remove user" on:click={(e) => promptRemove(e, user.id)}>
 						<svg width="24" height="24" viewBox="0 0 24 24">
